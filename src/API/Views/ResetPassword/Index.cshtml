@@ -1,0 +1,208 @@
+@using Microsoft.AspNetCore.Mvc.ModelBinding
+@model API.Dto.Auth.ResetPasswordModel
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+                <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Reset password</title>
+    <style>
+            * {
+                padding: 0;
+                margin: 0;
+                box-sizing: border-box;
+            }
+    
+            html {
+                font-size: 62.5%;
+            }
+    
+            :root {
+                --primary-color: #0c79f6;
+                --white-color: #fff;
+                --text-color: #333;
+            }
+    
+            /* Overlay scroll bar */
+            html *::-webkit-scrollbar {
+                border-radius: 0;
+                width: 8px;
+            }
+    
+            html *::-webkit-scrollbar-thumb {
+                border-radius: 4px;
+                background-color: rgba(0, 0, 0, 0.15);
+            }
+    
+            html *::-webkit-scrollbar-track {
+                border-radius: 0;
+                background-color: rgba(0, 0, 0, 0);
+            }
+    
+            button,
+            input,
+            [tabindex] {
+                border: none;
+                outline: none;
+            }
+    
+            li {
+                list-style-type: none;
+            }
+    
+            a {
+                text-decoration: none;
+            }
+    
+            .container {
+                display: flex;
+                height: 100vh;
+                background-image: linear-gradient(to right, #1E90FF, rgba(143, 101, 154, 0.753));
+                background-repeat: no-repeat;
+                background-size: cover;
+            }
+    
+            .content {
+                margin: auto;
+                width: 40vw;
+            }
+    
+            .title {
+                text-align: center;
+                font-size: 4rem;
+                font-weight: 600;
+                color: var(--text-color);
+                margin-bottom: 32px;
+            }
+    
+            #forgot-form,
+            .success-container {
+                padding: 48px;
+                background-color: rgba(255, 255, 255, 0.8);
+                border-radius: 16px;
+            }
+    
+            .form-group {
+                margin: 16px 0;
+            }
+    
+            .form-group label {
+                display: block;
+                font-size: 2rem;
+                font-weight: 500;
+                min-width: 200px;
+                margin-bottom: 8px;
+            }
+    
+            .form-group input {
+                padding: 12px 16px;
+                flex: 1;
+                border-radius: 8px;
+                border: 2px solid var(--primary-color);
+                width: 100%;
+            }
+    
+            .error {
+                font-size: 1.4rem;
+                font-weight: 500;
+                color: red;
+                margin-bottom: 8px;
+            }
+    
+            #reset-btn {
+                display: block;
+                width: 120px;
+                padding: 12px 16px;
+                border-radius: 8px;
+                font-size: 1.6rem;
+                font-weight: 500;
+                color: var(--white-color);
+                background-color: var(--primary-color);
+                cursor: pointer;
+                margin: 0 auto;
+            }
+    
+            #reset-btn:hover {
+                opacity: 0.6;
+            }
+    
+            .success-container h2 {
+                text-align: center;
+                font-size: 2rem;
+                font-weight: 600;
+            }
+        </style>
+</head>
+<body>
+<div class="container">
+    <div class="content">
+        <!-- Form content -->
+        <div id="forgot-form">
+            @{
+                var message = (string?) ViewBag.Message;
+                var isSuccess = (bool?) ViewBag.IsSuccess;
+                var color = isSuccess.HasValue ? "green" : "red";
+                if (message is not null)
+                {
+                    <div class="success-container">
+                        <h2 style="color: @color">@message</h2>
+                        <h2 id="count"></h2>
+                    </div>
+                }
+                else
+                {
+                    using (Html.BeginForm("ResetPassword", "ResetPassword", FormMethod.Post))
+                    {
+                        <h1 class="title">Đặt lại mật khẩu</h1>
+                        <div class="form-group" hidden="true">
+                            <input type="password" name="Id" value="@Model.Id"/>
+                        </div>
+                        <div class="form-group" hidden="true">
+                            <input type="password" name="Token" value="@Model.Token"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Mật khẩu</label>
+                            <input type="password" name="Password" id="password" value="@Model.Password"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="confirm">Xác nhận mật khẩu</label>
+                            <input type="password" name="ConfirmPassword" id="confirm" value="@Model.ConfirmPassword"/>
+                        </div>
+                        <button id="reset-btn" type="submit">Gửi</button>
+                        <!-- If error -->
+                        {
+                            var errors = (ModelStateDictionary)ViewBag.Errors;
+                            if (errors is not null)
+                            {
+                                <div class="error">
+                                    @{
+                                        foreach (var error in errors.Values.SelectMany(modelState => modelState.Errors))
+                                        {
+                                            <p>@error.ErrorMessage</p>
+                                        }
+                                    }
+                                </div>
+                            }
+                        }
+                    }
+                }
+            }
+        </div>
+    </div>
+</div>
+</body>
+<script type="text/javascript">
+    var countEl = document.querySelector('#count')
+    var count = 9
+    countEl.textContent = 'Đóng sau ' + (count + 1) + ' giây'
+    setInterval(() => {
+        if (count == 0) window.close()
+        countEl.textContent = 'Đóng sau ' + count-- + ' giây'
+    }, 1000)
+</script>
+</html>
+
+
+
+

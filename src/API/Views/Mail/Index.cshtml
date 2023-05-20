@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>iCoaching</title>
+        <link
+            rel="stylesheet"
+            type="text/css"
+            href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+        <link
+            rel="stylesheet"
+            type="text/css"
+            href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+        <style type="text/css">
+            body {
+                background: #f2f2f2;
+            }
+
+            .row {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 100vh;
+            }
+
+            .payment {
+                border: 1px solid #f2f2f2;
+                border-radius: 4px;
+                background: #fff;
+                width: 600px;
+            }
+            .payment_header {
+                background: #1e62af;
+                padding: 20px;
+                border-radius: 4px 4px 0px 0px;
+            }
+
+            .check,
+            .x {
+                margin: 0px auto;
+                width: 50px;
+                height: 50px;
+                border-radius: 100%;
+                background: #fff;
+                text-align: center;
+            }
+
+            .check i {
+                color: green;
+                vertical-align: middle;
+                line-height: 50px;
+                font-size: 30px;
+            }
+
+            .x i {
+                color: red;
+                vertical-align: middle;
+                line-height: 50px;
+                font-size: 30px;
+            }
+
+            .content {
+                text-align: center;
+            }
+
+            .content {
+                padding: 32px;
+            }
+
+            .content h1 {
+                font-size: 25px;
+            }
+
+            .payment.success > .content > h1 {
+                color: green;
+            }
+
+            .payment.fail > .content h1 {
+                color: red;
+            }
+
+            .content a {
+                width: 200px;
+                height: 35px;
+                color: #fff;
+                border-radius: 4px;
+                padding: 5px 10px;
+                background: #1e62af;
+                transition: all ease-in-out 0.3s;
+            }
+
+            .content a:hover {
+                text-decoration: none;
+                opacity: 0.6;
+            }
+        </style>
+    </head>
+<body>
+<div>
+    @{
+        var isSuccess = (bool?)ViewBag.IsSuccess;
+        var color = isSuccess.HasValue ? "green" : "red";
+        var message = (string)ViewBag.Message;
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <!-- Success -->
+
+                    @{
+                        if (isSuccess.HasValue)
+                        {
+                            <div class="payment success">
+                                <div class="payment_header">
+                                    <div class="check"><i class="fa fa-check" aria-hidden="true"></i></div>
+                                </div>
+                                <div class="content success">
+                                    <h1>@message</h1>
+                                    <h1 id="count" style="color: #1e62af"></h1>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <!-- Failed -->
+                            
+                            <div class="payment fail">
+                                <div class="payment_header">
+                                    <div class="x"><i class="fa fa-times" aria-hidden="true"></i></div>
+                                </div>
+                                <div class="content">
+                                    <h1>@message</h1>
+                                    <h1 id="count" style="color: #1e62af"></h1>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    }
+    
+    
+</div>
+</body>
+<script type="text/javascript">
+    var countEl = document.querySelector('#count')
+    var count = 9
+    countEl.textContent = 'Đóng sau ' + (count + 1) + ' giây'
+    setInterval(() => {
+        if (count == 0) window.close()
+        countEl.textContent = 'Đóng sau ' + count-- + ' giây'
+    }, 1000)
+</script>
+</html>

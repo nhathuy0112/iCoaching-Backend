@@ -1,0 +1,14 @@
+services:
+  devserver:
+    image: mysql:8.0
+    pull_policy: missing
+    ports:
+      - 3307:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=Abc12345!
+  icoaching:
+    build: .
+    ports:
+      - 8081:80
+    depends_on:
+      - devserver
